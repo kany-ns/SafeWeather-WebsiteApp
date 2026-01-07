@@ -33,17 +33,60 @@ document.getElementById('subscribeForm').addEventListener('submit', (e) => {
 const apiKey = "1d3157dfde962f1362a3d100078a8e10"; 
 const city = "Kuala Lumpur"; 
 
-async function getWeather() {
+async function fetchWeather() {
     try {
         const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`);
         const data = await response.json();
 
-        console.log(`Current Temp: ${data.main.temp}°C`);
+        const weatherDiv = document.getElementById('weather-info');
+        if(weatherDiv) {
+            weatherDiv.innerHTML = `
+                <p>Location: ${data.name}</p>
+                <p>Temperature: ${data.main.temp}°C</p>
+                <p>Status: ${data.weather[0].description}</p>
+            `;
+        }
     } catch (error) {
-        console.error("Error fetching weather:", error);
+        console.log("Weather API error:", error);
     }
 }
-getWeather();
+
+const registerForm = document.getElementById('registerForm');
+if(registerForm) {
+    registerForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = e.target.querySelector('input[type="email"]').value;
+        const password = e.target.querySelector('input[type="password"]').value;
+
+        // Simpan data dalam browser
+        const userData = { email, password };
+        localStorage.setItem('user', JSON.stringify(userData));
+        
+        alert("Registration Successful! Data saved in LocalStorage.");
+    });
+}
+
+const complaintForm = document.getElementById('complaintForm');
+if(complaintForm) {
+    complaintForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const location = e.target.querySelector('input').value;
+        const description = e.target.querySelector('textarea').value;
+
+        const newComplaint = { location, description, date: new Date().toLocaleDateString() };
+
+        let allComplaints = JSON.parse(localStorage.getItem('complaints')) || [];
+        allComplaints.push(newComplaint);
+        localStorage.setItem('complaints', JSON.stringify(allComplaints));
+
+        alert("Hazard report submitted! This will be saved even if you refresh.");
+        e.target.reset(); 
+    });
+}
+
+window.onload = () => {
+    fetchWeather();
+};
 
 function askChatbot(question) {
     if(question.includes("flood")) {
@@ -52,4 +95,5 @@ function askChatbot(question) {
         return "How can I assist you with the weather updates?";
     }
     return "I am sorry, I don't understand that.";
+
 }
