@@ -30,6 +30,61 @@ document.getElementById('subscribeForm').addEventListener('submit', (e) => {
     alert('Subscription successful! Check your email for weather alerts.');
 });
 
+function displayComplaints() {
+    const listContainer = document.getElementById('complaint-list');
+    const allComplaints = JSON.parse(localStorage.getItem('complaints')) || [];
+    
+    listContainer.innerHTML = ''; 
+
+    if (allComplaints.length === 0) {
+        listContainer.innerHTML = '<p>No reports submitted yet.</p>';
+        return;
+    }
+
+    allComplaints.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'complaint-card';
+        card.innerHTML = `
+            <h4>📍 ${item.location}</h4>
+            <p><strong>Issue:</strong> ${item.description}</p>
+            <small>Reported on: ${item.date}</small>
+        `;
+        listContainer.appendChild(card);
+    });
+}
+
+document.getElementById('complaintForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const location = e.target.querySelector('input').value;
+    const description = e.target.querySelector('textarea').value;
+
+    const newComplaint = { 
+        location, 
+        description, 
+        date: new Date().toLocaleString() 
+    };
+    
+    let allComplaints = JSON.parse(localStorage.getItem('complaints')) || [];
+    allComplaints.push(newComplaint);
+    localStorage.setItem('complaints', JSON.stringify(allComplaints));
+
+    alert("Report Saved!");
+    e.target.reset();
+    displayComplaints(); 
+});
+
+function clearComplaints() {
+    if(confirm("Are you sure you want to delete all reports?")) {
+        localStorage.removeItem('complaints');
+        displayComplaints();
+    }
+}
+
+window.onload = () => {
+    fetchWeather(); 
+    displayComplaints(); 
+};
+
 const apiKey = "1d3157dfde962f1362a3d100078a8e10"; 
 const city = "Kuala Lumpur"; 
 
@@ -97,3 +152,4 @@ function askChatbot(question) {
     return "I am sorry, I don't understand that.";
 
 }
+
