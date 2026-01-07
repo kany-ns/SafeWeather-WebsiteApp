@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeWeather Web App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="light-mode">
+    <nav>
+        <div class="logo">SafeWeather</div>
+        <ul class="nav-links">
+            <li><button id="theme-toggle">Toggle Mode</button></li>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#register" onclick="showSection('auth-section')">Login/Register</a></li>
+            <li><a href="#complaints" onclick="showSection('complaint-section')">Report Hazard</a></li>
+        </ul>
+    </nav>
+
+    <section id="auth-section" class="content-section">
+        <h2>User Account</h2>
+        <div class="form-container">
+            <form id="registerForm">
+                <h3>Register</h3>
+                <input type="text" placeholder="Full Name" required>
+                <input type="email" placeholder="Email Address" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit">Sign Up</button>
+            </form>
+            <hr>
+            <form id="loginForm">
+                <h3>Login</h3>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </section>
+
+    <section id="complaint-section" class="content-section" style="display:none;">
+        <h2>Submit a Complaint / Report Hazard</h2>
+        <form id="complaintForm">
+            <input type="text" placeholder="Location" required>
+            <select required>
+                <option value="">Select Hazard Type</option>
+                <option value="flood">Flash Flood</option>
+                <option value="storm">Heavy Storm</option>
+                <option value="roadblock">Road Closed</option>
+            </select>
+            <textarea placeholder="Describe the situation..."></textarea>
+            <button type="submit">Submit Report</button>
+        </form>
+    </section>
+
+    <footer id="subscribe-section">
+        <h3>Stay Updated</h3>
+        <form id="subscribeForm">
+            <input type="email" placeholder="Enter your email to subscribe" required>
+            <button type="submit">Subscribe</button>
+        </form>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
